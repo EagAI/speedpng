@@ -242,3 +242,29 @@
 .auth-strength-label.str-fair   { color: #ff9800; }
 .auth-strength-label.str-good   { color: #f5c623; }
 .auth-strength-label.str-strong { color: #4caf50; }
+
+/* Remember me */
+.auth-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-remember-check {
+  width: 15px;
+  height: 15px;
+  accent-color: #f5a623;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.auth-remember-label {
+  font-size: 13px;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.auth-remember:hover .auth-remember-label { color: #bbb; }

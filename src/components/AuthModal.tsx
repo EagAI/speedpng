@@ -30,6 +30,7 @@ export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalPr
   const [confirm, setConfirm] = useState('')
   const [showPw, setShowPw] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [rememberMe, setRememberMe] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -65,8 +66,17 @@ export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalPr
 
     if (tab === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setError(error.message)
-      else onClose()
+      if (error) {
+        setError(error.message)
+      } else {
+        if (!rememberMe) {
+          // Remove session from localStorage so it doesn't survive a browser restart
+          Object.keys(localStorage)
+            .filter((k) => k.startsWith('sb-'))
+            .forEach((k) => localStorage.removeItem(k))
+        }
+        onClose()
+      }
     } else {
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) {
@@ -181,6 +191,18 @@ export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalPr
               </button>
               {mismatch && <span className="auth-mismatch">Passwords don't match</span>}
             </div>
+          )}
+
+          {tab === 'login' && (
+            <label className="auth-remember">
+              <input
+                type="checkbox"
+                className="auth-remember-check"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span className="auth-remember-label">Remember me</span>
+            </label>
           )}
 
           <button type="submit" className="auth-submit" disabled={loading || mismatch}>
