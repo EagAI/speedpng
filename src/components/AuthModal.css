@@ -155,7 +155,73 @@
   border: 1px solid rgba(255, 80, 80, 0.2);
   border-radius: 7px;
   padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
+
+.auth-error-link {
+  background: transparent;
+  border: none;
+  color: #f5a623;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  font-family: inherit;
+}
+
+.auth-error-link:hover { text-decoration: underline; }
+
+/* Forgot password back link + form title */
+.auth-back-row {
+  margin-bottom: 20px;
+}
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.auth-back:hover { color: #ccc; }
+
+.auth-form-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 16px;
+}
+
+/* Login row: remember me + forgot password side by side */
+.auth-login-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auth-forgot-link {
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.auth-forgot-link:hover { color: #f5a623; }
 
 .auth-success {
   font-size: 12px;

@@ -18,6 +18,28 @@ export default function AdminPanel() {
   const [lightbox, setLightbox] = useState<UploadRow | null>(null)
   const [lbConfirmDelete, setLbConfirmDelete] = useState(false)
   const [filter, setFilter] = useState<'all' | 'anon' | 'users'>('all')
+  const [registrationOpen, setRegistrationOpen] = useState(true)
+  const [togglingReg, setTogglingReg] = useState(false)
+
+  useEffect(() => {
+    supabase
+      .from('app_settings')
+      .select('value')
+      .eq('key', 'registration_open')
+      .single()
+      .then(({ data }) => setRegistrationOpen(data?.value !== 'false'))
+  }, [])
+
+  const toggleRegistration = async () => {
+    setTogglingReg(true)
+    const next = !registrationOpen
+    await supabase
+      .from('app_settings')
+      .update({ value: next ? 'true' : 'false' })
+      .eq('key', 'registration_open')
+    setRegistrationOpen(next)
+    setTogglingReg(false)
+  }
 
   const loadUploads = useCallback(async () => {
     setLoading(true)
@@ -129,13 +151,24 @@ export default function AdminPanel() {
       <div className="admin-header">
         <div className="admin-header-top">
           <h2 className="admin-title">Admin Panel</h2>
-          <button className="admin-refresh" onClick={loadUploads} title="Refresh">
+          <div className="admin-header-actions">
+            <button
+              className={`admin-reg-toggle ${registrationOpen ? 'admin-reg-toggle--open' : 'admin-reg-toggle--closed'}`}
+              onClick={toggleRegistration}
+              disabled={togglingReg}
+              title="Toggle public registration"
+            >
+              <span className={`admin-reg-dot ${registrationOpen ? 'admin-reg-dot--open' : ''}`} />
+              Registration {registrationOpen ? 'open' : 'closed'}
+            </button>
+            <button className="admin-refresh" onClick={loadUploads} title="Refresh">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
               <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
             </svg>
             Refresh
-          </button>
+            </button>
+          </div>
         </div>
         <div className="admin-stats">
           <span className="admin-stat">{uploads.length} total</span>

@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import type { User } from '@supabase/supabase-js'
+import { supabase } from '../lib/supabase'
 import './Header.css'
 
 export type View = 'upload' | 'dashboard' | 'admin'
@@ -13,6 +15,17 @@ interface HeaderProps {
 }
 
 export default function Header({ user, isAdmin, view, onViewChange, onShowAuth, onLogout }: HeaderProps) {
+  const [registrationOpen, setRegistrationOpen] = useState(true)
+
+  useEffect(() => {
+    supabase
+      .from('app_settings')
+      .select('value')
+      .eq('key', 'registration_open')
+      .single()
+      .then(({ data }) => setRegistrationOpen(data?.value !== 'false'))
+  }, [])
+
   return (
     <header className="hdr">
       <div className="hdr-inner">
@@ -48,7 +61,9 @@ export default function Header({ user, isAdmin, view, onViewChange, onShowAuth, 
           ) : (
             <>
               <button className="hdr-btn-outline" onClick={() => onShowAuth('login')}>Log in</button>
-              <button className="hdr-btn-primary" onClick={() => onShowAuth('register')}>Register</button>
+              {registrationOpen && (
+                <button className="hdr-btn-primary" onClick={() => onShowAuth('register')}>Register</button>
+              )}
             </>
           )}
         </div>

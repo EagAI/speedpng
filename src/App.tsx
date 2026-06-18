@@ -7,13 +7,15 @@ import ImageUploader from './components/ImageUploader'
 import UserDashboard from './components/UserDashboard'
 import AdminPanel from './components/AdminPanel'
 import AuthModal from './components/AuthModal'
+import ResetPasswordModal from './components/ResetPasswordModal'
 import './App.css'
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [view, setView] = useState<View>('upload')
-  const [showAuth, setShowAuth] = useState<false | 'login' | 'register'>(false)
+  const [showAuth, setShowAuth] = useState<false | 'login' | 'register' | 'forgot'>(false)
+  const [showReset, setShowReset] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const checkAdmin = async (userId: string) => {
@@ -33,9 +35,15 @@ export default function App() {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       const u = session?.user ?? null
       setUser(u)
+
+      if (event === 'PASSWORD_RECOVERY') {
+        setShowReset(true)
+        return
+      }
+
       if (u) {
         checkAdmin(u.id)
       } else {
@@ -84,6 +92,7 @@ export default function App() {
       </div>
 
       {showAuth && <AuthModal initialTab={showAuth} onClose={() => setShowAuth(false)} />}
+      {showReset && <ResetPasswordModal onDone={() => setShowReset(false)} />}
     </div>
   )
 }

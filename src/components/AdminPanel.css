@@ -17,6 +17,54 @@
   justify-content: space-between;
 }
 
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-reg-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 7px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border: 1px solid;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  font-family: inherit;
+}
+
+.admin-reg-toggle--open {
+  color: #4caf50;
+  background: rgba(76,175,80,0.07);
+  border-color: rgba(76,175,80,0.25);
+}
+
+.admin-reg-toggle--open:hover { background: rgba(76,175,80,0.14); }
+
+.admin-reg-toggle--closed {
+  color: #ff5050;
+  background: rgba(255,80,80,0.07);
+  border-color: rgba(255,80,80,0.25);
+}
+
+.admin-reg-toggle--closed:hover { background: rgba(255,80,80,0.14); }
+
+.admin-reg-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.admin-reg-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5050;
+  flex-shrink: 0;
+}
+
+.admin-reg-dot--open { background: #4caf50; }
+
 .admin-title {
   font-size: 20px;
   font-weight: 700;
