@@ -64,13 +64,21 @@ export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalPr
 
     setLoading(true)
 
+    const toMsg = (err: unknown): string => {
+      if (!err) return 'Something went wrong.'
+      if (typeof err === 'string') return err
+      if (typeof (err as { message?: unknown }).message === 'string') {
+        return (err as { message: string }).message
+      }
+      try { return JSON.stringify(err) } catch { return 'An unexpected error occurred.' }
+    }
+
     if (tab === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
-        setError(error.message)
+        setError(toMsg(error))
       } else {
         if (!rememberMe) {
-          // Remove session from localStorage so it doesn't survive a browser restart
           Object.keys(localStorage)
             .filter((k) => k.startsWith('sb-'))
             .forEach((k) => localStorage.removeItem(k))
@@ -78,11 +86,15 @@ export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalPr
         onClose()
       }
     } else {
-      const { error } = await supabase.auth.signUp({ email, password })
+      const { data, error } = await supabase.auth.signUp({ email, password })
       if (error) {
-        setError(error.message)
+        setError(toMsg(error))
+      } else if (data.session) {
+        // Email confirmation disabled — user is logged in immediately
+        onClose()
       } else {
-        setSuccess('Account created! You can now log in.')
+        // Email confirmation required
+        setSuccess('Check your email to confirm your account, then log in.')
         switchTab('login')
       }
     }
