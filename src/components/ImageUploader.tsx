@@ -171,7 +171,7 @@ export default function ImageUploader({ user }: ImageUploaderProps) {
     setErrorMsg(null)
 
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
-    const id = Array.from({ length: 5 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
+    const id = Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
     const path = `img/${id}.png`
 
     const { error: uploadError } = await supabase.storage
