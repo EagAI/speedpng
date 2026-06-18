@@ -25,10 +25,21 @@ const STRENGTH_CLASS = ['', 'str-weak', 'str-fair', 'str-good', 'str-strong']
 
 // Map known Supabase error messages to friendly copy
 function friendlyError(raw: unknown): { text: string; loginHint?: boolean } {
-  const msg = typeof raw === 'string' ? raw
-    : typeof (raw as { message?: unknown }).message === 'string'
-      ? (raw as { message: string }).message
-      : (() => { try { return JSON.stringify(raw) } catch { return 'Unexpected error' } })()
+  // AuthApiError stores message as a class getter — must read it directly
+  let msg = ''
+  if (typeof raw === 'string') {
+    msg = raw
+  } else if (raw && typeof raw === 'object') {
+    const e = raw as Record<string, unknown>
+    if (typeof e.message === 'string' && e.message) {
+      msg = e.message
+    } else {
+      // Serialize including inherited/getter props
+      try { msg = JSON.stringify(raw, Object.getOwnPropertyNames(Object.getPrototypeOf(raw)).concat(Object.getOwnPropertyNames(raw))) } catch { /* */ }
+      if (!msg || msg === '{}') msg = String(raw)
+      if (msg === '[object Object]') msg = ''
+    }
+  }
 
   const lower = msg.toLowerCase()
   if (lower.includes('already registered') || lower.includes('already in use') || lower.includes('user already exists')) {
@@ -45,6 +56,9 @@ function friendlyError(raw: unknown): { text: string; loginHint?: boolean } {
   }
   if (lower.includes('password') && lower.includes('short')) {
     return { text: 'Password is too short. Use at least 8 characters.' }
+  }
+  if (lower.includes('signup') || lower.includes('sign up') || lower.includes('not allowed') || lower.includes('disabled')) {
+    return { text: 'Registration is currently disabled.' }
   }
   return { text: msg || 'Something went wrong. Please try again.' }
 }
