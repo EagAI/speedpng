@@ -92,21 +92,22 @@ export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalPr
   return (
     <div className="auth-backdrop" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="auth-close" onClick={onClose}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
-        <div className="auth-tabs">
-          <button
-            className={`auth-tab ${tab === 'login' ? 'auth-tab--active' : ''}`}
-            onClick={() => switchTab('login')}
-          >Login</button>
-          <button
-            className={`auth-tab ${tab === 'register' ? 'auth-tab--active' : ''}`}
-            onClick={() => switchTab('register')}
-          >Register</button>
+        <div className="auth-header">
+          <div className="auth-tabs">
+            <button
+              className={`auth-tab ${tab === 'login' ? 'auth-tab--active' : ''}`}
+              onClick={() => switchTab('login')}
+            >Login</button>
+            <button
+              className={`auth-tab ${tab === 'register' ? 'auth-tab--active' : ''}`}
+              onClick={() => switchTab('register')}
+            >Register</button>
+          </div>
+          <button className="auth-close" onClick={onClose}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>

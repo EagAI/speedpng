@@ -20,10 +20,9 @@
   background: #141414;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  padding: 32px;
+  padding: 24px;
   width: 100%;
   max-width: 380px;
-  position: relative;
   animation: auth-slide 0.18s ease;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
 }
@@ -33,23 +32,11 @@
   to   { transform: scale(1);    opacity: 1; }
 }
 
-.auth-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  background: transparent;
-  border: none;
-  color: #555;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
+.auth-header {
   display: flex;
-  transition: color 0.2s, background 0.2s;
-}
-
-.auth-close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .auth-tabs {
@@ -58,7 +45,27 @@
   background: rgba(255, 255, 255, 0.04);
   border-radius: 8px;
   padding: 4px;
-  margin-bottom: 24px;
+  flex: 1;
+}
+
+.auth-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #666;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.auth-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .auth-tab {
