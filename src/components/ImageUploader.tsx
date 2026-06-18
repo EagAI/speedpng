@@ -136,8 +136,7 @@ export default function ImageUploader() {
       return
     }
 
-    const { data } = supabase.storage.from('images').getPublicUrl(path)
-    setPublicUrl(data.publicUrl)
+    setPublicUrl(`https://uzgrudinti.dev/img/${id}.png`)
     setUploadState('done')
   }
 
