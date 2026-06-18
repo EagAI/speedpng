@@ -13,7 +13,7 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [view, setView] = useState<View>('upload')
-  const [showAuth, setShowAuth] = useState(false)
+  const [showAuth, setShowAuth] = useState<false | 'login' | 'register'>(false)
   const [loading, setLoading] = useState(true)
 
   const checkAdmin = async (userId: string) => {
@@ -53,7 +53,7 @@ export default function App() {
   }
 
   const handleViewChange = (v: View) => {
-    if (v === 'dashboard' && !user) { setShowAuth(true); return }
+    if (v === 'dashboard' && !user) { setShowAuth('login'); return }
     if (v === 'admin' && !isAdmin) return
     setView(v)
   }
@@ -73,7 +73,7 @@ export default function App() {
         isAdmin={isAdmin}
         view={view}
         onViewChange={handleViewChange}
-        onShowAuth={() => setShowAuth(true)}
+        onShowAuth={(tab) => setShowAuth(tab ?? 'login')}
         onLogout={handleLogout}
       />
 
@@ -83,7 +83,7 @@ export default function App() {
         {view === 'admin' && isAdmin && <AdminPanel />}
       </div>
 
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      {showAuth && <AuthModal initialTab={showAuth} onClose={() => setShowAuth(false)} />}
     </div>
   )
 }

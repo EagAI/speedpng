@@ -4,6 +4,7 @@ import './AuthModal.css'
 
 interface AuthModalProps {
   onClose: () => void
+  initialTab?: 'login' | 'register'
 }
 
 type AuthTab = 'login' | 'register'
@@ -22,8 +23,8 @@ function getStrength(pw: string): 0 | 1 | 2 | 3 | 4 {
 const STRENGTH_LABEL = ['', 'Weak', 'Fair', 'Good', 'Strong']
 const STRENGTH_CLASS = ['', 'str-weak', 'str-fair', 'str-good', 'str-strong']
 
-export default function AuthModal({ onClose }: AuthModalProps) {
-  const [tab, setTab] = useState<AuthTab>('login')
+export default function AuthModal({ onClose, initialTab = 'login' }: AuthModalProps) {
+  const [tab, setTab] = useState<AuthTab>(initialTab)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')

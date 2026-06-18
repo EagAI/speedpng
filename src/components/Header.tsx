@@ -8,7 +8,7 @@ interface HeaderProps {
   isAdmin: boolean
   view: View
   onViewChange: (v: View) => void
-  onShowAuth: () => void
+  onShowAuth: (tab?: 'login' | 'register') => void
   onLogout: () => void
 }
 
@@ -47,8 +47,8 @@ export default function Header({ user, isAdmin, view, onViewChange, onShowAuth, 
             </>
           ) : (
             <>
-              <button className="hdr-btn-outline" onClick={onShowAuth}>Log in</button>
-              <button className="hdr-btn-primary" onClick={onShowAuth}>Register</button>
+              <button className="hdr-btn-outline" onClick={() => onShowAuth('login')}>Log in</button>
+              <button className="hdr-btn-primary" onClick={() => onShowAuth('register')}>Register</button>
             </>
           )}
         </div>
