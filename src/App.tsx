@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import PasswordGate from './components/PasswordGate'
 import ImageUploader from './components/ImageUploader'
+import AdminPanel from './components/AdminPanel'
+
+type AuthRole = 'none' | 'user' | 'admin'
 
 export default function App() {
-  const [authenticated, setAuthenticated] = useState(false)
+  const [role, setRole] = useState<AuthRole>('none')
 
-  if (!authenticated) {
-    return <PasswordGate onSuccess={() => setAuthenticated(true)} />
+  if (role === 'none') {
+    return <PasswordGate onSuccess={(r) => setRole(r)} />
   }
-
+  if (role === 'admin') {
+    return <AdminPanel onLogout={() => setRole('none')} />
+  }
   return <ImageUploader />
 }

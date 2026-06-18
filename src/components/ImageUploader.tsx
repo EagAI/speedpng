@@ -1,8 +1,28 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import * as nsfwjs from 'nsfwjs'
 import { supabase } from '../lib/supabase'
 import './ImageUploader.css'
 
-type UploadState = 'idle' | 'preview' | 'uploading' | 'done' | 'error'
+type UploadState = 'idle' | 'preview' | 'scanning' | 'uploading' | 'done' | 'error'
+
+let nsfwModel: nsfwjs.NSFWJS | null = null
+async function getNsfwModel() {
+  if (!nsfwModel) {
+    nsfwModel = await nsfwjs.load()
+  }
+  return nsfwModel
+}
+
+async function checkNsfw(imgElement: HTMLImageElement): Promise<boolean> {
+  const model = await getNsfwModel()
+  const predictions = await model.classify(imgElement)
+  const get = (name: string) => predictions.find(p => p.className === name)?.probability ?? 0
+  const porn   = get('Porn')
+  const hentai = get('Hentai')
+  const sexy   = get('Sexy')
+  // Block if any single NSFW class exceeds threshold, or combined score is high
+  return porn > 0.2 || hentai > 0.2 || sexy > 0.4 || (porn + hentai + sexy) > 0.5
+}
 
 function convertToPng(file: File): Promise<File> {
   return new Promise((resolve, reject) => {
@@ -75,6 +95,29 @@ export default function ImageUploader() {
     setPublicUrl(null)
     setErrorMsg(null)
     setWasConverted(converted)
+    setUploadState('scanning')
+
+    // NSFW scan — load image element from the blob URL
+    try {
+      const img = new Image()
+      await new Promise<void>((res, rej) => {
+        img.onload = () => res()
+        img.onerror = () => rej(new Error('Image load failed'))
+        img.src = url
+      })
+      const flagged = await checkNsfw(img)
+      if (flagged) {
+        URL.revokeObjectURL(url)
+        setFile(null)
+        setPreviewUrl(null)
+        setErrorMsg('This image contains nudity or explicit content and cannot be uploaded.')
+        setUploadState('error')
+        return
+      }
+    } catch {
+      // If scan fails, allow upload (fail open)
+    }
+
     setUploadState('preview')
   }, [])
 
@@ -199,6 +242,13 @@ export default function ImageUploader() {
             </div>
           )}
 
+          {uploadState === 'scanning' && (
+            <div className="scanning-state">
+              <span className="spinner scanning-spinner" />
+              <p className="scanning-label">Scanning for NSFW content…</p>
+            </div>
+          )}
+
           {(uploadState === 'preview' || uploadState === 'uploading') && previewUrl && (
             <div className="preview-section">
               <div className="preview-frame">
@@ -217,14 +267,14 @@ export default function ImageUploader() {
                 <button
                   className="btn-outline"
                   onClick={handleReset}
-                  disabled={uploadState === 'uploading'}
+                  disabled={uploadState === 'uploading' || uploadState === 'scanning'}
                 >
                   Change
                 </button>
                 <button
                   className="btn-primary"
                   onClick={handleUpload}
-                  disabled={uploadState === 'uploading'}
+                  disabled={uploadState === 'uploading' || uploadState === 'scanning'}
                 >
                   {uploadState === 'uploading' ? (
                     <span className="btn-spinner">

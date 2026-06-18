@@ -359,6 +359,29 @@
   cursor: not-allowed;
 }
 
+/* Scanning state */
+.scanning-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px 24px;
+}
+
+.scanning-spinner {
+  width: 28px !important;
+  height: 28px !important;
+  border-width: 3px !important;
+  border-color: rgba(245, 166, 35, 0.2) !important;
+  border-top-color: #f5a623 !important;
+}
+
+.scanning-label {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
 /* Spinner */
 .btn-spinner {
   display: flex;

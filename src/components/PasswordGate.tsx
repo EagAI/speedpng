@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import './PasswordGate.css'
 
 interface PasswordGateProps {
-  onSuccess: () => void
+  onSuccess: (role: 'user' | 'admin') => void
 }
 
 export default function PasswordGate({ onSuccess }: PasswordGateProps) {
@@ -14,7 +14,9 @@ export default function PasswordGate({ onSuccess }: PasswordGateProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (password === 'speedrp') {
-      onSuccess()
+      onSuccess('user')
+    } else if (password === 'londonas') {
+      onSuccess('admin')
     } else {
       setError(true)
       setShake(true)
