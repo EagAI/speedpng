@@ -111,6 +111,16 @@
 
 .auth-input::placeholder { color: #555; -webkit-text-fill-color: #555; }
 
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 9999px #1e1e1e inset !important;
+  box-shadow: 0 0 0 9999px #1e1e1e inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #f5a623;
+}
+
 .auth-submit {
   width: 100%;
   background: #f5a623;
