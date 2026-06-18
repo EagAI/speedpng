@@ -162,3 +162,83 @@
   border-radius: 7px;
   padding: 9px 12px;
 }
+
+/* Password field with toggle */
+.auth-pw-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-pw-wrap .auth-input {
+  padding-right: 40px;
+}
+
+.auth-pw-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.auth-pw-toggle:hover { color: #aaa; }
+
+.auth-mismatch {
+  font-size: 11px;
+  color: #ff5050;
+  margin-top: 5px;
+  padding-left: 2px;
+}
+
+.auth-input--error {
+  border-color: rgba(255, 80, 80, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(255, 80, 80, 0.08) !important;
+}
+
+/* Password strength bar */
+.auth-strength {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -4px;
+}
+
+.auth-strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.auth-strength-bar {
+  height: 3px;
+  flex: 1;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.25s;
+}
+
+.auth-strength-bar.str-weak   { background: #ff4444; }
+.auth-strength-bar.str-fair   { background: #ff9800; }
+.auth-strength-bar.str-good   { background: #f5c623; }
+.auth-strength-bar.str-strong { background: #4caf50; }
+
+.auth-strength-label {
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 36px;
+  text-align: right;
+}
+
+.auth-strength-label.str-weak   { color: #ff4444; }
+.auth-strength-label.str-fair   { color: #ff9800; }
+.auth-strength-label.str-good   { color: #f5c623; }
+.auth-strength-label.str-strong { color: #4caf50; }
