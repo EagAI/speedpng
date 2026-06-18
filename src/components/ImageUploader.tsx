@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import type { User } from '@supabase/supabase-js'
 import * as nsfwjs from 'nsfwjs'
 import { supabase } from '../lib/supabase'
 import './ImageUploader.css'
@@ -57,7 +58,11 @@ function convertToPng(file: File): Promise<File> {
   })
 }
 
-export default function ImageUploader() {
+interface ImageUploaderProps {
+  user: User | null
+}
+
+export default function ImageUploader({ user }: ImageUploaderProps) {
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [publicUrl, setPublicUrl] = useState<string | null>(null)
@@ -169,15 +174,21 @@ export default function ImageUploader() {
     const id = Array.from({ length: 5 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
     const path = `img/${id}.png`
 
-    const { error } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('images')
       .upload(path, file, { cacheControl: '3600', upsert: false })
 
-    if (error) {
-      setErrorMsg(error.message)
+    if (uploadError) {
+      setErrorMsg(uploadError.message)
       setUploadState('error')
       return
     }
+
+    // Track upload in DB (user_id null for anonymous)
+    await supabase.from('uploads').insert({
+      filename: `${id}.png`,
+      user_id: user?.id ?? null,
+    })
 
     setPublicUrl(`https://uzgrudinti.dev/img/${id}.png`)
     setUploadState('done')
@@ -204,16 +215,13 @@ export default function ImageUploader() {
 
   return (
     <div className="uploader-root">
-      <header className="uploader-header">
-        <div className="uploader-header-inner">
-          <span className="uploader-brand">uzgrudinti<span className="uploader-brand-accent">.dev</span></span>
-        </div>
-      </header>
-
       <main className="uploader-main">
         <div className="uploader-card">
           <h2 className="uploader-title">Image Uploader</h2>
-          <p className="uploader-desc">Upload an image to get a shareable link.</p>
+          <p className="uploader-desc">
+            Upload an image to get a shareable link.
+            {!user && <span className="uploader-desc-hint"> Log in to keep a history of your uploads.</span>}
+          </p>
 
           {uploadState === 'idle' && (
             <div
@@ -267,14 +275,14 @@ export default function ImageUploader() {
                 <button
                   className="btn-outline"
                   onClick={handleReset}
-                  disabled={uploadState === 'uploading' || uploadState === 'scanning'}
+                  disabled={uploadState !== 'preview'}
                 >
                   Change
                 </button>
                 <button
                   className="btn-primary"
                   onClick={handleUpload}
-                  disabled={uploadState === 'uploading' || uploadState === 'scanning'}
+                  disabled={uploadState !== 'preview'}
                 >
                   {uploadState === 'uploading' ? (
                     <span className="btn-spinner">

@@ -1,18 +1,89 @@
-import { useState } from 'react'
-import PasswordGate from './components/PasswordGate'
+import { useState, useEffect } from 'react'
+import type { User } from '@supabase/supabase-js'
+import { supabase } from './lib/supabase'
+import Header from './components/Header'
+import type { View } from './components/Header'
 import ImageUploader from './components/ImageUploader'
+import UserDashboard from './components/UserDashboard'
 import AdminPanel from './components/AdminPanel'
-
-type AuthRole = 'none' | 'user' | 'admin'
+import AuthModal from './components/AuthModal'
+import './App.css'
 
 export default function App() {
-  const [role, setRole] = useState<AuthRole>('none')
+  const [user, setUser] = useState<User | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [view, setView] = useState<View>('upload')
+  const [showAuth, setShowAuth] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  if (role === 'none') {
-    return <PasswordGate onSuccess={(r) => setRole(r)} />
+  const checkAdmin = async (userId: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', userId)
+      .single()
+    setIsAdmin(data?.role === 'admin')
   }
-  if (role === 'admin') {
-    return <AdminPanel onLogout={() => setRole('none')} />
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const u = session?.user ?? null
+      setUser(u)
+      if (u) checkAdmin(u.id)
+      setLoading(false)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const u = session?.user ?? null
+      setUser(u)
+      if (u) {
+        checkAdmin(u.id)
+      } else {
+        setIsAdmin(false)
+        setView('upload')
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setView('upload')
   }
-  return <ImageUploader />
+
+  const handleViewChange = (v: View) => {
+    if (v === 'dashboard' && !user) { setShowAuth(true); return }
+    if (v === 'admin' && !isAdmin) return
+    setView(v)
+  }
+
+  if (loading) {
+    return (
+      <div className="app-loading">
+        <span className="app-loading-spinner" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="app">
+      <Header
+        user={user}
+        isAdmin={isAdmin}
+        view={view}
+        onViewChange={handleViewChange}
+        onShowAuth={() => setShowAuth(true)}
+        onLogout={handleLogout}
+      />
+
+      <div className="app-content">
+        {view === 'upload' && <ImageUploader user={user} />}
+        {view === 'dashboard' && user && <UserDashboard user={user} />}
+        {view === 'admin' && isAdmin && <AdminPanel />}
+      </div>
+
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+    </div>
+  )
 }

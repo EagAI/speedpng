@@ -1,36 +1,6 @@
 .uploader-root {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-/* Header */
-.uploader-header {
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 0 24px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-}
-
-.uploader-header-inner {
-  display: flex;
-  align-items: center;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.uploader-brand {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.02em;
-}
-
-.uploader-brand-accent {
-  color: #f5a623;
 }
 
 /* Main */
@@ -66,6 +36,10 @@
   font-size: 13px;
   color: #777;
   margin: 0 0 28px;
+}
+
+.uploader-desc-hint {
+  color: #555;
 }
 
 /* Drop Zone */
