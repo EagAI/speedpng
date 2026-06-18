@@ -8,6 +8,9 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- TF.js and nsfwjs loaded from CDN to keep Docker build memory-light -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nsfwjs@4.3.0/dist/nsfwjs.min.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

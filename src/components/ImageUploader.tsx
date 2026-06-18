@@ -1,13 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import type { User } from '@supabase/supabase-js'
-import * as nsfwjs from 'nsfwjs'
 import { supabase } from '../lib/supabase'
 import './ImageUploader.css'
 
 type UploadState = 'idle' | 'preview' | 'scanning' | 'uploading' | 'done' | 'error'
 
-let nsfwModel: nsfwjs.NSFWJS | null = null
-async function getNsfwModel() {
+interface NsfwPrediction { className: string; probability: number }
+interface NsfwModel { classify(img: HTMLImageElement): Promise<NsfwPrediction[]> }
+interface NsfwJSLib { load(): Promise<NsfwModel> }
+
+// Loaded from CDN (see index.html) — not bundled
+declare const nsfwjs: NsfwJSLib
+
+let nsfwModel: NsfwModel | null = null
+async function getNsfwModel(): Promise<NsfwModel> {
   if (!nsfwModel) {
     nsfwModel = await nsfwjs.load()
   }
@@ -21,7 +27,6 @@ async function checkNsfw(imgElement: HTMLImageElement): Promise<boolean> {
   const porn   = get('Porn')
   const hentai = get('Hentai')
   const sexy   = get('Sexy')
-  // Block if any single NSFW class exceeds threshold, or combined score is high
   return porn > 0.2 || hentai > 0.2 || sexy > 0.4 || (porn + hentai + sexy) > 0.5
 }
 
