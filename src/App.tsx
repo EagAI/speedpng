@@ -8,6 +8,7 @@ import UserDashboard from './components/UserDashboard'
 import AdminPanel from './components/AdminPanel'
 import AuthModal from './components/AuthModal'
 import ResetPasswordModal from './components/ResetPasswordModal'
+import ProfileModal from './components/ProfileModal'
 import './App.css'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
   const [view, setView] = useState<View>('upload')
   const [showAuth, setShowAuth] = useState<false | 'login' | 'register' | 'forgot'>(false)
   const [showReset, setShowReset] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const checkAdmin = async (userId: string) => {
@@ -82,7 +84,7 @@ export default function App() {
         view={view}
         onViewChange={handleViewChange}
         onShowAuth={(tab) => setShowAuth(tab ?? 'login')}
-        onLogout={handleLogout}
+        onShowProfile={() => setShowProfile(true)}
       />
 
       <div className="app-content">
@@ -93,6 +95,13 @@ export default function App() {
 
       {showAuth && <AuthModal initialTab={showAuth} onClose={() => setShowAuth(false)} />}
       {showReset && <ResetPasswordModal onDone={() => setShowReset(false)} />}
+      {showProfile && user && (
+        <ProfileModal
+          user={user}
+          onClose={() => setShowProfile(false)}
+          onLogout={() => { setShowProfile(false); handleLogout() }}
+        />
+      )}
     </div>
   )
 }

@@ -107,3 +107,50 @@
   background: #f8b940;
   box-shadow: 0 0 16px rgba(245,166,35,0.35);
 }
+
+.hdr-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 5px 10px 5px 5px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: inherit;
+  max-width: 220px;
+}
+
+.hdr-profile-btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(245,166,35,0.3);
+}
+
+.hdr-profile-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(245,166,35,0.2);
+  border: 1px solid rgba(245,166,35,0.4);
+  color: #f5a623;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hdr-profile-email {
+  font-size: 12px;
+  color: #aaa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hdr-profile-chevron {
+  color: #555;
+  flex-shrink: 0;
+}

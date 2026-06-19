@@ -11,10 +11,10 @@ interface HeaderProps {
   view: View
   onViewChange: (v: View) => void
   onShowAuth: (tab?: 'login' | 'register') => void
-  onLogout: () => void
+  onShowProfile: () => void
 }
 
-export default function Header({ user, isAdmin, view, onViewChange, onShowAuth, onLogout }: HeaderProps) {
+export default function Header({ user, isAdmin, view, onViewChange, onShowAuth, onShowProfile }: HeaderProps) {
   const [registrationOpen, setRegistrationOpen] = useState(true)
 
   useEffect(() => {
@@ -54,10 +54,15 @@ export default function Header({ user, isAdmin, view, onViewChange, onShowAuth, 
 
         <div className="hdr-auth">
           {user ? (
-            <>
-              <span className="hdr-email">{user.email}</span>
-              <button className="hdr-btn-outline" onClick={onLogout}>Log out</button>
-            </>
+            <button className="hdr-profile-btn" onClick={onShowProfile} title="Account settings">
+              <span className="hdr-profile-avatar">
+                {(user.email?.[0] ?? '?').toUpperCase()}
+              </span>
+              <span className="hdr-profile-email">{user.email}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="hdr-profile-chevron">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
           ) : (
             <>
               <button className="hdr-btn-outline" onClick={() => onShowAuth('login')}>Log in</button>
