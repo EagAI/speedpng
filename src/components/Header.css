@@ -153,4 +153,61 @@
 .hdr-profile-chevron {
   color: #555;
   flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.hdr-profile-chevron--up { transform: rotate(180deg); }
+.hdr-profile-btn--open { border-color: rgba(245,166,35,0.35); background: rgba(255,255,255,0.08); }
+
+/* Dropdown */
+.hdr-profile-wrap {
+  position: relative;
+}
+
+.hdr-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 5px;
+  min-width: 180px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  z-index: 100;
+  animation: dd-fade 0.12s ease;
+}
+
+@keyframes dd-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hdr-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: left;
+  font-family: inherit;
+}
+
+.hdr-dd-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+
+.hdr-dd-item--danger { color: #ff5050; }
+.hdr-dd-item--danger:hover { background: rgba(255,80,80,0.1); color: #ff5050; }
+
+.hdr-dd-sep {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 4px 0;
 }

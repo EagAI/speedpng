@@ -8,7 +8,8 @@ import UserDashboard from './components/UserDashboard'
 import AdminPanel from './components/AdminPanel'
 import AuthModal from './components/AuthModal'
 import ResetPasswordModal from './components/ResetPasswordModal'
-import ProfileModal from './components/ProfileModal'
+import AccountModal from './components/AccountModal'
+import ChangePasswordModal from './components/ChangePasswordModal'
 import './App.css'
 
 export default function App() {
@@ -17,7 +18,8 @@ export default function App() {
   const [view, setView] = useState<View>('upload')
   const [showAuth, setShowAuth] = useState<false | 'login' | 'register' | 'forgot'>(false)
   const [showReset, setShowReset] = useState(false)
-  const [showProfile, setShowProfile] = useState(false)
+  const [showAccount, setShowAccount] = useState(false)
+  const [showChangePw, setShowChangePw] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const checkAdmin = async (userId: string) => {
@@ -84,7 +86,9 @@ export default function App() {
         view={view}
         onViewChange={handleViewChange}
         onShowAuth={(tab) => setShowAuth(tab ?? 'login')}
-        onShowProfile={() => setShowProfile(true)}
+        onShowAccount={() => setShowAccount(true)}
+        onShowChangePassword={() => setShowChangePw(true)}
+        onLogout={handleLogout}
       />
 
       <div className="app-content">
@@ -95,11 +99,17 @@ export default function App() {
 
       {showAuth && <AuthModal initialTab={showAuth} onClose={() => setShowAuth(false)} />}
       {showReset && <ResetPasswordModal onDone={() => setShowReset(false)} />}
-      {showProfile && user && (
-        <ProfileModal
+      {showAccount && user && (
+        <AccountModal
           user={user}
-          onClose={() => setShowProfile(false)}
-          onLogout={() => { setShowProfile(false); handleLogout() }}
+          onClose={() => setShowAccount(false)}
+          onDeleted={() => { setShowAccount(false); setView('upload') }}
+        />
+      )}
+      {showChangePw && user && (
+        <ChangePasswordModal
+          user={user}
+          onClose={() => setShowChangePw(false)}
         />
       )}
     </div>

@@ -2,21 +2,27 @@
   max-width: 420px;
 }
 
+.profile-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 20px;
+}
+
 .profile-info {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-top: 4px;
+  gap: 12px;
 }
 
 .profile-avatar {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: rgba(245, 166, 35, 0.15);
+  background: rgba(245, 166, 35, 0.12);
   border: 2px solid rgba(245, 166, 35, 0.3);
   color: #f5a623;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -32,7 +38,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9px;
-  padding: 12px 14px;
+  padding: 11px 14px;
 }
 
 .profile-label {
@@ -49,23 +55,114 @@
   word-break: break-all;
 }
 
-.profile-logout-btn {
+/* Danger zone */
+.profile-danger-zone {
+  margin-top: 8px;
+  border: 1px solid rgba(255, 80, 80, 0.15);
+  border-radius: 10px;
+  padding: 14px;
+  background: rgba(255, 80, 80, 0.03);
+}
+
+.profile-danger-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ff5050;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 12px;
+}
+
+.profile-delete-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   width: 100%;
   background: transparent;
-  border: 1px solid rgba(255, 80, 80, 0.25);
+  border: 1px solid rgba(255, 80, 80, 0.3);
   border-radius: 8px;
-  padding: 10px;
+  padding: 9px 14px;
   font-size: 13px;
   font-weight: 600;
   color: #ff5050;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   font-family: inherit;
-  margin-top: 4px;
+  justify-content: center;
 }
 
-.profile-logout-btn:hover { background: rgba(255, 80, 80, 0.08); }
+.profile-delete-btn:hover {
+  background: rgba(255, 80, 80, 0.1);
+  border-color: rgba(255, 80, 80, 0.5);
+}
+
+/* Confirmation box */
+.profile-confirm-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-confirm-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff5050;
+  margin: 0;
+}
+
+.profile-confirm-body {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.profile-confirm-body strong { color: #ccc; }
+
+.profile-confirm-error {
+  font-size: 12px;
+  color: #ff5050;
+  margin: 0;
+}
+
+.profile-confirm-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.profile-confirm-yes {
+  flex: 1;
+  background: #ff5050;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.profile-confirm-yes:hover:not(:disabled) { background: #e03c3c; }
+.profile-confirm-yes:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.profile-confirm-cancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.profile-confirm-cancel:hover:not(:disabled) { color: #ccc; border-color: rgba(255,255,255,0.25); }
+.profile-confirm-cancel:disabled { opacity: 0.5; cursor: not-allowed; }
